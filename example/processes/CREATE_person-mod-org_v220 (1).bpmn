@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0bjt4l1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.34.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.19.0">
+  <bpmn:process id="person-mod-org" name="person-mod-org" isExecutable="true">
+    <bpmn:extensionElements>
+      <camunda:executionListener class="de.guh.extension.endProcessInstance" event="end" />
+      <camunda:executionListener class="de.guh.extension.startProcessInstance" event="start">
+        <camunda:field name="system_alternativetargetname">
+          <camunda:expression>${execution.getVariable('surname')}, ${execution.getVariable('givenname')}</camunda:expression>
+        </camunda:field>
+        <camunda:field name="system_descriptionsuffix">
+          <camunda:expression>${execution.getVariable('surname')}, ${execution.getVariable('givenname')}</camunda:expression>
+        </camunda:field>
+      </camunda:executionListener>
+    </bpmn:extensionElements>
+    <bpmn:startEvent id="StartEvent_1" camunda:asyncAfter="true">
+      <bpmn:outgoing>Flow_01vbt3g</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="end">
+      <bpmn:incoming>Flow_1cvznif</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="mail_to_initiator" name="mail to initiator" camunda:class="de.guh.extension.sendMailToInitiator">
+      <bpmn:extensionElements>
+        <camunda:executionListener class="de.guh.extension.updateProcessInstance" event="start">
+          <camunda:field name="excludelocalvariables">
+            <camunda:string>false</camunda:string>
+          </camunda:field>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_01vbt3g</bpmn:incoming>
+      <bpmn:outgoing>Flow_1k93pd5</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="setorgunits" name="setorgunits" camunda:class="de.guh.extension.callRequestsCommand">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="companyuniqueid">${newcompanyuniqueid}</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatorobjecttype">Account</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatoruniqueidpropertyname">globaluniqueid</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatoruniqueid">${execution.getVariable('processinitiatoruniqueid') != null ? execution.getVariable('processinitiatoruniqueid') :''}</camunda:inputParameter>
+          <camunda:inputParameter name="locationuniqueid">${newlocationuniqueid}</camunda:inputParameter>
+          <camunda:inputParameter name="orgunit1uniqueid">${execution.getVariable('neworgunit1uniqueid') != null &amp;&amp; execution.getVariable('neworgunit1uniqueid') != '' ? execution.getVariable('neworgunit1uniqueid'): '[REMOVE]'}</camunda:inputParameter>
+          <camunda:inputParameter name="orgunit2uniqueid">${execution.getVariable('neworgunit2uniqueid') != null &amp;&amp; execution.getVariable('neworgunit2uniqueid') != '' ? execution.getVariable('neworgunit2uniqueid'): '[REMOVE]'}</camunda:inputParameter>
+          <camunda:inputParameter name="orgunit3uniqueid">${execution.getVariable('neworgunit3uniqueid') != null &amp;&amp; execution.getVariable('neworgunit3uniqueid') != '' ? execution.getVariable('neworgunit3uniqueid'): '[REMOVE]'}</camunda:inputParameter>
+        </camunda:inputOutput>
+        <camunda:field name="category">
+          <camunda:string>person</camunda:string>
+        </camunda:field>
+        <camunda:field name="command">
+          <camunda:string>modify</camunda:string>
+        </camunda:field>
+        <camunda:field name="id">
+          <camunda:expression>${processtargetuniqueid}</camunda:expression>
+        </camunda:field>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1wex3bq</bpmn:incoming>
+      <bpmn:outgoing>Flow_11no70a</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="modify_company" name="modify company" camunda:class="de.guh.extension.callRequestsCommand">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="targetobjectuniqueid">${execution.getVariable('newcompanyglobaluniqueid') != null ? execution.getVariable('newcompanyglobaluniqueid') :''}</camunda:inputParameter>
+          <camunda:inputParameter name="targetobjectuniqueidpropertyname">globaluniqueid</camunda:inputParameter>
+          <camunda:inputParameter name="targetobjecttype">Company</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatorobjecttype">Account</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatoruniqueidpropertyname">globaluniqueid</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatoruniqueid">${execution.getVariable('processinitiatoruniqueid') != null ? execution.getVariable('processinitiatoruniqueid') :''}</camunda:inputParameter>
+          <camunda:inputParameter name="relationname">EMPLOYED_BY</camunda:inputParameter>
+        </camunda:inputOutput>
+        <camunda:executionListener class="de.guh.extension.updateProcessInstance" event="end" />
+        <camunda:field name="category">
+          <camunda:string>person</camunda:string>
+        </camunda:field>
+        <camunda:field name="command">
+          <camunda:string>modifyRelation</camunda:string>
+        </camunda:field>
+        <camunda:field name="id">
+          <camunda:expression>${processtargetuniqueid}</camunda:expression>
+        </camunda:field>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1k93pd5</bpmn:incoming>
+      <bpmn:outgoing>Flow_05if38b</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="modify_location" name="modify location" camunda:class="de.guh.extension.callRequestsCommand">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="targetobjectuniqueid">${execution.getVariable('newlocationglobaluniqueid') != null ? execution.getVariable('newlocationglobaluniqueid') :''}</camunda:inputParameter>
+          <camunda:inputParameter name="targetobjectuniqueidpropertyname">globaluniqueid</camunda:inputParameter>
+          <camunda:inputParameter name="targetobjecttype">Location</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatorobjecttype">Account</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatoruniqueidpropertyname">globaluniqueid</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatoruniqueid">${execution.getVariable('processinitiatoruniqueid') != null ? execution.getVariable('processinitiatoruniqueid') :''}</camunda:inputParameter>
+          <camunda:inputParameter name="relationname">LOCATED_AT</camunda:inputParameter>
+        </camunda:inputOutput>
+        <camunda:executionListener class="de.guh.extension.updateProcessInstance" event="end" />
+        <camunda:field name="category">
+          <camunda:string>person</camunda:string>
+        </camunda:field>
+        <camunda:field name="command">
+          <camunda:string>modifyRelation</camunda:string>
+        </camunda:field>
+        <camunda:field name="id">
+          <camunda:expression>${processtargetuniqueid}</camunda:expression>
+        </camunda:field>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_05if38b</bpmn:incoming>
+      <bpmn:outgoing>Flow_05f6gfh</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="modify_orgunit1" name="modify orgunit1" camunda:class="de.guh.extension.callRequestsCommand">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="targetobjectuniqueid">${execution.getVariable('neworgunit1globaluniqueid') != null ? execution.getVariable('neworgunit1globaluniqueid') :''}</camunda:inputParameter>
+          <camunda:inputParameter name="targetobjectuniqueidpropertyname">globaluniqueid</camunda:inputParameter>
+          <camunda:inputParameter name="targetobjecttype">Orgunit</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatorobjecttype">Account</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatoruniqueidpropertyname">globaluniqueid</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatoruniqueid">${execution.getVariable('processinitiatoruniqueid') != null ? execution.getVariable('processinitiatoruniqueid') :''}</camunda:inputParameter>
+          <camunda:inputParameter name="relationname">ASSIGNED_TO_LEVEL1</camunda:inputParameter>
+        </camunda:inputOutput>
+        <camunda:executionListener class="de.guh.extension.updateProcessInstance" event="end" />
+        <camunda:field name="category">
+          <camunda:string>person</camunda:string>
+        </camunda:field>
+        <camunda:field name="command">
+          <camunda:string>modifyRelation</camunda:string>
+        </camunda:field>
+        <camunda:field name="id">
+          <camunda:expression>${processtargetuniqueid}</camunda:expression>
+        </camunda:field>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_05f6gfh</bpmn:incoming>
+      <bpmn:outgoing>Flow_1nwcozy</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="modify_orgunit2" name="modify orgunit2" camunda:class="de.guh.extension.callRequestsCommand">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="targetobjectuniqueid">${execution.getVariable('neworgunit2globaluniqueid') != null ? execution.getVariable('neworgunit2globaluniqueid') :''}</camunda:inputParameter>
+          <camunda:inputParameter name="targetobjectuniqueidpropertyname">globaluniqueid</camunda:inputParameter>
+          <camunda:inputParameter name="targetobjecttype">Orgunit</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatorobjecttype">Account</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatoruniqueidpropertyname">globaluniqueid</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatoruniqueid">${execution.getVariable('processinitiatoruniqueid') != null ? execution.getVariable('processinitiatoruniqueid') :''}</camunda:inputParameter>
+          <camunda:inputParameter name="relationname">ASSIGNED_TO_LEVEL2</camunda:inputParameter>
+        </camunda:inputOutput>
+        <camunda:executionListener class="de.guh.extension.updateProcessInstance" event="end" />
+        <camunda:field name="category">
+          <camunda:string>person</camunda:string>
+        </camunda:field>
+        <camunda:field name="command">
+          <camunda:string>modifyRelation</camunda:string>
+        </camunda:field>
+        <camunda:field name="id">
+          <camunda:expression>${processtargetuniqueid}</camunda:expression>
+        </camunda:field>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1nwcozy</bpmn:incoming>
+      <bpmn:outgoing>Flow_04vhlfy</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="modify_orgunit3" name="modify orgunit3" camunda:class="de.guh.extension.callRequestsCommand">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="targetobjectuniqueid">${execution.getVariable('neworgunit3globaluniqueid') != null ? execution.getVariable('neworgunit3globaluniqueid') :''}</camunda:inputParameter>
+          <camunda:inputParameter name="targetobjectuniqueidpropertyname">globaluniqueid</camunda:inputParameter>
+          <camunda:inputParameter name="targetobjecttype">Orgunit</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatorobjecttype">Account</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatoruniqueidpropertyname">globaluniqueid</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatoruniqueid">${execution.getVariable('processinitiatoruniqueid') != null ? execution.getVariable('processinitiatoruniqueid') :''}</camunda:inputParameter>
+          <camunda:inputParameter name="relationname">ASSIGNED_TO_LEVEL3</camunda:inputParameter>
+        </camunda:inputOutput>
+        <camunda:executionListener class="de.guh.extension.updateProcessInstance" event="end" />
+        <camunda:field name="category">
+          <camunda:string>person</camunda:string>
+        </camunda:field>
+        <camunda:field name="command">
+          <camunda:string>modifyRelation</camunda:string>
+        </camunda:field>
+        <camunda:field name="id">
+          <camunda:expression>${processtargetuniqueid}</camunda:expression>
+        </camunda:field>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_04vhlfy</bpmn:incoming>
+      <bpmn:outgoing>Flow_1wex3bq</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="mail_to_person_success" name="mail to person success" camunda:asyncBefore="true" camunda:class="de.guh.extension.sendMailToObject">
+      <bpmn:extensionElements>
+        <camunda:executionListener class="de.guh.extension.updateProcessInstance" event="end" />
+        <camunda:field name="objecttype">
+          <camunda:string>Person</camunda:string>
+        </camunda:field>
+        <camunda:field name="objectuniqueidpropertyname">
+          <camunda:string>globaluniqueid</camunda:string>
+        </camunda:field>
+        <camunda:field name="objectuniqueid">
+          <camunda:expression>${processtargetuniqueid}</camunda:expression>
+        </camunda:field>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08v6pri</bpmn:incoming>
+      <bpmn:incoming>Flow_0tvhqhq</bpmn:incoming>
+      <bpmn:outgoing>Flow_0gtgryf</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="mail_to_initiator_success" name="mail to initiator success" camunda:class="de.guh.extension.sendMailToInitiator">
+      <bpmn:extensionElements>
+        <camunda:executionListener class="de.guh.extension.updateProcessInstance" event="end" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1jb0uwg</bpmn:incoming>
+      <bpmn:outgoing>Flow_1cvznif</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_05if38b" sourceRef="modify_company" targetRef="modify_location" />
+    <bpmn:sequenceFlow id="Flow_05f6gfh" sourceRef="modify_location" targetRef="modify_orgunit1" />
+    <bpmn:sequenceFlow id="Flow_1nwcozy" sourceRef="modify_orgunit1" targetRef="modify_orgunit2" />
+    <bpmn:sequenceFlow id="Flow_04vhlfy" sourceRef="modify_orgunit2" targetRef="modify_orgunit3" />
+    <bpmn:sequenceFlow id="Flow_1wex3bq" sourceRef="modify_orgunit3" targetRef="setorgunits" />
+    <bpmn:sequenceFlow id="Flow_0gtgryf" sourceRef="mail_to_person_success" targetRef="mail_to_resp_success" />
+    <bpmn:sequenceFlow id="Flow_01vbt3g" sourceRef="StartEvent_1" targetRef="mail_to_initiator" />
+    <bpmn:sequenceFlow id="Flow_1k93pd5" sourceRef="mail_to_initiator" targetRef="modify_company" />
+    <bpmn:sequenceFlow id="Flow_11no70a" sourceRef="setorgunits" targetRef="Gateway_05u2f3p" />
+    <bpmn:sequenceFlow id="Flow_1cvznif" sourceRef="mail_to_initiator_success" targetRef="end" />
+    <bpmn:serviceTask id="mail_to_resp_success" name="mail to resp success" camunda:class="de.guh.extension.sendMailToObject">
+      <bpmn:extensionElements>
+        <camunda:executionListener class="de.guh.extension.updateProcessInstance" event="end" />
+        <camunda:field name="objecttype">
+          <camunda:string>Person</camunda:string>
+        </camunda:field>
+        <camunda:field name="objectuniqueidpropertyname">
+          <camunda:string>globaluniqueid</camunda:string>
+        </camunda:field>
+        <camunda:field name="objectuniqueid">
+          <camunda:expression>${currentresponsibleglobaluniqueid}</camunda:expression>
+        </camunda:field>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0gtgryf</bpmn:incoming>
+      <bpmn:outgoing>Flow_1jb0uwg</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1jb0uwg" sourceRef="mail_to_resp_success" targetRef="mail_to_initiator_success" />
+    <bpmn:exclusiveGateway id="Gateway_05u2f3p" default="Flow_08v6pri">
+      <bpmn:incoming>Flow_11no70a</bpmn:incoming>
+      <bpmn:outgoing>Flow_08v6pri</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0rur1ez</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_08v6pri" sourceRef="Gateway_05u2f3p" targetRef="mail_to_person_success" />
+    <bpmn:serviceTask id="set_adressdata" name="setaddressdata" camunda:class="de.guh.extension.callRequestsCommand">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="city">${execution.getVariable('city') != null &amp;&amp; execution.getVariable('city') != '' ? execution.getVariable('city'): '[REMOVE]'}</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatorobjecttype">Account</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatoruniqueidpropertyname">globaluniqueid</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatoruniqueid">${execution.getVariable('processinitiatoruniqueid') != null ? execution.getVariable('processinitiatoruniqueid') :''}</camunda:inputParameter>
+          <camunda:inputParameter name="state">${execution.getVariable('state') != null &amp;&amp; execution.getVariable('state') != '' ? execution.getVariable('state'): '[REMOVE]'}</camunda:inputParameter>
+          <camunda:inputParameter name="street">${execution.getVariable('street') != null &amp;&amp; execution.getVariable('street') != '' ? execution.getVariable('street'): '[REMOVE]'}</camunda:inputParameter>
+          <camunda:inputParameter name="country">${execution.getVariable('country') != null &amp;&amp; execution.getVariable('country') != '' ? execution.getVariable('country'): '[REMOVE]'}</camunda:inputParameter>
+          <camunda:inputParameter name="countrycode">${execution.getVariable('countrycode') != null &amp;&amp; execution.getVariable('countrycode') != '' ? execution.getVariable('countrycode'): '[REMOVE]'}</camunda:inputParameter>
+          <camunda:inputParameter name="postalcode">${execution.getVariable('postalcode') != null &amp;&amp; execution.getVariable('postalcode') != '' ? execution.getVariable('postalcode'): '[REMOVE]'}</camunda:inputParameter>
+          <camunda:inputParameter name="countrycodenumeric">${execution.getVariable('countrycodenumeric') != null &amp;&amp; execution.getVariable('countrycodenumeric') != '' ? execution.getVariable('countrycodenumeric'): '[REMOVE]'}</camunda:inputParameter>
+          <camunda:inputParameter name="timezone">${execution.getVariable('timezone') != null &amp;&amp; execution.getVariable('timezone') != '' ? execution.getVariable('timezone'): '[REMOVE]'}</camunda:inputParameter>
+        </camunda:inputOutput>
+        <camunda:field name="category">
+          <camunda:string>person</camunda:string>
+        </camunda:field>
+        <camunda:field name="command">
+          <camunda:string>modify</camunda:string>
+        </camunda:field>
+        <camunda:field name="id">
+          <camunda:expression>${processtargetuniqueid}</camunda:expression>
+        </camunda:field>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0rur1ez</bpmn:incoming>
+      <bpmn:outgoing>Flow_0tvhqhq</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0rur1ez" sourceRef="Gateway_05u2f3p" targetRef="set_adressdata">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${displaytab2== "true"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0tvhqhq" sourceRef="set_adressdata" targetRef="mail_to_person_success" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="person-mod-org">
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="292" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_10ba3yb_di" bpmnElement="end">
+        <dc:Bounds x="1732" y="292" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1601" y="265" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0g09h1q_di" bpmnElement="mail_to_initiator">
+        <dc:Bounds x="280" y="270" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0iv8jjq" bpmnElement="setorgunits">
+        <dc:Bounds x="1100" y="270" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1t1k6zp" bpmnElement="modify_company">
+        <dc:Bounds x="430" y="270" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0hlg5ln" bpmnElement="modify_location">
+        <dc:Bounds x="580" y="270" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1sk8r2u" bpmnElement="modify_orgunit1">
+        <dc:Bounds x="720" y="270" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0oqjoxh" bpmnElement="modify_orgunit2">
+        <dc:Bounds x="850" y="270" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1a9d8cn" bpmnElement="modify_orgunit3">
+        <dc:Bounds x="980" y="270" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_02c73yb" bpmnElement="mail_to_person_success">
+        <dc:Bounds x="1330" y="270" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0prhu7k" bpmnElement="mail_to_initiator_success">
+        <dc:Bounds x="1570" y="270" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_126k6es" bpmnElement="mail_to_resp_success">
+        <dc:Bounds x="1450" y="270" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_05u2f3p_di" bpmnElement="Gateway_05u2f3p" isMarkerVisible="true">
+        <dc:Bounds x="1235" y="285" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1y9lkow" bpmnElement="set_adressdata">
+        <dc:Bounds x="1210" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_05if38b_di" bpmnElement="Flow_05if38b">
+        <di:waypoint x="530" y="310" />
+        <di:waypoint x="580" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05f6gfh_di" bpmnElement="Flow_05f6gfh">
+        <di:waypoint x="680" y="310" />
+        <di:waypoint x="720" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1nwcozy_di" bpmnElement="Flow_1nwcozy">
+        <di:waypoint x="820" y="310" />
+        <di:waypoint x="850" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_04vhlfy_di" bpmnElement="Flow_04vhlfy">
+        <di:waypoint x="950" y="310" />
+        <di:waypoint x="980" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1wex3bq_di" bpmnElement="Flow_1wex3bq">
+        <di:waypoint x="1080" y="310" />
+        <di:waypoint x="1100" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0gtgryf_di" bpmnElement="Flow_0gtgryf">
+        <di:waypoint x="1430" y="310" />
+        <di:waypoint x="1450" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_01vbt3g_di" bpmnElement="Flow_01vbt3g">
+        <di:waypoint x="188" y="310" />
+        <di:waypoint x="280" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1k93pd5_di" bpmnElement="Flow_1k93pd5">
+        <di:waypoint x="380" y="310" />
+        <di:waypoint x="430" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11no70a_di" bpmnElement="Flow_11no70a">
+        <di:waypoint x="1200" y="310" />
+        <di:waypoint x="1235" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1cvznif_di" bpmnElement="Flow_1cvznif">
+        <di:waypoint x="1670" y="310" />
+        <di:waypoint x="1732" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1jb0uwg_di" bpmnElement="Flow_1jb0uwg">
+        <di:waypoint x="1550" y="310" />
+        <di:waypoint x="1570" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08v6pri_di" bpmnElement="Flow_08v6pri">
+        <di:waypoint x="1285" y="310" />
+        <di:waypoint x="1330" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0rur1ez_di" bpmnElement="Flow_0rur1ez">
+        <di:waypoint x="1260" y="285" />
+        <di:waypoint x="1260" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tvhqhq_di" bpmnElement="Flow_0tvhqhq">
+        <di:waypoint x="1310" y="120" />
+        <di:waypoint x="1320" y="120" />
+        <di:waypoint x="1320" y="290" />
+        <di:waypoint x="1330" y="290" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

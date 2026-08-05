@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lifecycle>
+
+    <!-- ============================================ -->
+    <!-- TEST CONFIGURATION                           -->
+    <!-- ============================================ -->
+    <config>
+        <workflowengineid>1</workflowengineid>
+    </config>
+
+    <!-- ============================================ -->
+    <!-- Policy 1002002: readytodelete → deletioninprogress + REMOVE account tasks -->
+    <!-- Person 2-100004 must have status=readytodelete and leavedate > 28 days ago -->
+    <!-- ============================================ -->
+    <eventCollection dbuser="daccord" streamname="Lifecycle with PersonCandidate" streamid="1011">
+
+        <nodeEvent>
+            <eventuniqueid>test-policy-1002002</eventuniqueid>
+            <eventname>PolicyStatistics</eventname>
+            <labels>PolicyStatistics</labels>
+            <type>MODIFY_NODE</type>
+            <timestamp>1724343599696</timestamp>
+            <sourcenodeuniqueid>1002002</sourcenodeuniqueid>
+            <sourcenodename>Policy_PersonDeletionStart</sourcenodename>
+            <propertyEvents/>
+        </nodeEvent>
+
+    </eventCollection>
+
+</lifecycle>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0stiz9p" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.34.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.23.0">
+  <bpmn:process id="person-mod-attributes-auto" name="person mod attributes auto" isExecutable="true">
+    <bpmn:extensionElements>
+      <camunda:executionListener class="de.guh.extension.startProcessInstance" event="start">
+        <camunda:field name="system_alternativetargetname">
+          <camunda:expression>${execution.getVariable('surname')}, ${execution.getVariable('givenname')}</camunda:expression>
+        </camunda:field>
+        <camunda:field name="system_descriptionsuffix">
+          <camunda:expression>${execution.getVariable('givenname')}, ${execution.getVariable('surname')}</camunda:expression>
+        </camunda:field>
+      </camunda:executionListener>
+      <camunda:executionListener class="de.guh.extension.endProcessInstance" event="end" />
+    </bpmn:extensionElements>
+    <bpmn:startEvent id="start" name="start">
+      <bpmn:outgoing>Flow_04xjqsy</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="mod-attributes" name="mod-attributes" camunda:class="de.guh.extension.callRequestsCommand">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="actioninitiatorobjecttype">Account</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatoruniqueidpropertyname">globaluniqueid</camunda:inputParameter>
+          <camunda:inputParameter name="actioninitiatoruniqueid">${execution.getVariable('processinitiatoruniqueid') != null ? execution.getVariable('processinitiatoruniqueid') :''}</camunda:inputParameter>
+          <camunda:inputParameter name="telephonenumber">${execution.getVariable('telephonenumber') != null ? execution.getVariable('telephonenumber') :''}
+</camunda:inputParameter>
+          <camunda:inputParameter name="mobile">${execution.getVariable('mobile') != null ? execution.getVariable('mobile') :''}</camunda:inputParameter>
+          <camunda:inputParameter name="costcenter">${execution.getVariable('costcenter') != null ? execution.getVariable('costcenter') :''}</camunda:inputParameter>
+          <camunda:inputParameter name="workforceid">${execution.getVariable('workforceid') != null ? execution.getVariable('workforceid') :''}</camunda:inputParameter>
+          <camunda:inputParameter name="position">${execution.getVariable('position') != null ? execution.getVariable('position') :''}</camunda:inputParameter>
+          <camunda:inputParameter name="jobtitle">${execution.getVariable('jobtitle') != null ? execution.getVariable('jobtitle') :''}</camunda:inputParameter>
+        </camunda:inputOutput>
+        <camunda:field name="category">
+          <camunda:string>person</camunda:string>
+        </camunda:field>
+        <camunda:field name="command">
+          <camunda:string>modify</camunda:string>
+        </camunda:field>
+        <camunda:field name="id">
+          <camunda:expression>${processtargetuniqueid}</camunda:expression>
+        </camunda:field>
+        <camunda:executionListener class="de.guh.extension.updateProcessInstance" event="end" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_04xjqsy</bpmn:incoming>
+      <bpmn:outgoing>Flow_1fhliw6</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_04xjqsy" sourceRef="start" targetRef="mod-attributes" />
+    <bpmn:endEvent id="end" name="end">
+      <bpmn:incoming>Flow_1fhliw6</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1fhliw6" sourceRef="mod-attributes" targetRef="end" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="person-mod-attributes-auto">
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="start">
+        <dc:Bounds x="182" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="189" y="145" width="23" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0iv8jjq" bpmnElement="mod-attributes">
+        <dc:Bounds x="370" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_10ba3yb_di" bpmnElement="end">
+        <dc:Bounds x="612" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="621" y="145" width="19" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_04xjqsy_di" bpmnElement="Flow_04xjqsy">
+        <di:waypoint x="218" y="120" />
+        <di:waypoint x="370" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1fhliw6_di" bpmnElement="Flow_1fhliw6">
+        <di:waypoint x="470" y="120" />
+        <di:waypoint x="612" y="120" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lifecycle>
+
+    <!-- ============================================ -->
+    <!-- TEST CONFIGURATION                           -->
+    <!-- ============================================ -->
+    <config>
+        <workflowengineid>1</workflowengineid>
+    </config>
+
+
+    <!-- ============================================ -->
+    <!-- EVENT DATA - PolicyStatistics               -->
+    <!-- Policy: Check Absence Start (ID: 1002003)   -->
+    <!-- ============================================ -->
+    <!-- Simulates a dAccord policy trigger event.   -->
+    <!-- Sets all active persons with absencestartdate-->
+    <!-- <= today to status=absent in Neo4j.         -->
+    <eventCollection dbuser="daccord" streamname="Lifecycle with PersonCandidate" streamid="1011">
+        <nodeEvent>
+            <!-- Event metadata -->
+            <eventuniqueid>test-policy-absencestart-001</eventuniqueid>
+            <eventname>PolicyStatistics</eventname>
+            <labels>PolicyStatistics</labels>
+            <type>MODIFY_NODE</type>
+            <timestamp>1724343599695</timestamp>
+
+            <!-- Policy identification -->
+            <!-- sourcenodeuniqueid = policyId → routed in processPolicyEvents() -->
+            <sourcenodeuniqueid>1002003</sourcenodeuniqueid>
+            <sourcenodename>Check Absence Start Policy</sourcenodename>
+
+            <propertyEvents/>
+        </nodeEvent>
+    </eventCollection>
+
+
+    <!-- ============================================ -->
+    <!-- EXPECTED BEHAVIOR                            -->
+    <!-- ============================================ -->
+    <!-- Policy handler: handlePolicyAbsenceStart    -->
+    <!-- Query: MATCH (n:Person)                     -->
+    <!--        WHERE status = 'active'              -->
+    <!--          AND absencestartdate <= date()      -->
+    <!-- Action: SET p.status = 'absent'             -->
+    <!-- ============================================ -->
+
+</lifecycle>

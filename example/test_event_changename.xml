@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lifecycle>
+
+    <!-- ============================================ -->
+    <!-- TEST CONFIGURATION                           -->
+    <!-- ============================================ -->
+    <config>
+        <workflowengineid>1</workflowengineid>
+    </config>
+
+
+    <!-- ============================================ -->
+    <!-- EVENT DATA - PersonCandidate CHANGE_NAME     -->
+    <!-- ============================================ -->
+    <!-- Triggered when surname or givenname changes  -->
+    <eventCollection dbuser="daccord" streamname="Lifecycle with PersonCandidate" streamid="1011">
+        <nodeEvent>
+            <!-- Event metadata -->
+            <eventuniqueid>test-changename-001</eventuniqueid>
+            <eventname>PersonCandidate</eventname>
+            <labels>PersonCandidate</labels>
+            <type>MODIFY_NODE</type>
+            <timestamp>1724343599695</timestamp>
+
+            <!-- PersonCandidate identification -->
+            <!-- uniqueid must exist in the daccord database! -->
+            <sourcenodeuniqueid>100052</sourcenodeuniqueid>
+            <sourcenodename>Silas Wagner</sourcenodename>
+
+            <!-- Property change: surname changed -->
+            <propertyEvents>
+                <propertyEvent>
+                    <type>MODIFY_PROPERTY</type>
+                    <name>surname</name>
+                    <oldvalue>Wagner</oldvalue>
+                    <newvalue>Wagner-Müller</newvalue>
+                </propertyEvent>
+            </propertyEvents>
+        </nodeEvent>
+    </eventCollection>
+
+
+    <!-- ============================================ -->
+    <!-- EXPECTED BEHAVIOR                            -->
+    <!-- ============================================ -->
+    <!-- PersonCandidate: Silas Wagner (100052)       -->
+    <!-- Action detected: CHANGE_NAME                 -->
+    <!-- Workflow started: person-mod-name            -->
+    <!-- Variables from PersonCandidate (new values): -->
+    <!--   givenname: Silas                           -->
+    <!--   surname: Wagner-Müller (new)               -->
+    <!--   gender: M                                  -->
+    <!--   salutation: Herr                           -->
+    <!-- Variables from Person node (old values):     -->
+    <!--   currentgivenname: Silas                    -->
+    <!--   currentsurname: Wagner (old)               -->
+    <!--   currentgender: M                           -->
+    <!--   currentsalutation: Herr                    -->
+    <!-- Variables from IS_PERSONMANAGER:             -->
+    <!--   givennamecurrentresponsible: Henrietta     -->
+    <!--   surnamecurrentresponsible: Schuldtmann     -->
+    <!--   currentresponsibleperson: HSchuldtmann     -->
+    <!--   newresponsibleperson: HSchuldtmann         -->
+    <!-- ============================================ -->
+
+</lifecycle>

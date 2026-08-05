@@ -1,0 +1,15 @@
+# Build output
+target/
+dependency-reduced-pom.xml
+
+# SVN metadata
+.svn/
+
+# Eclipse project files
+.classpath
+.project
+.settings/
+
+# Internal notes
+notes.txt
+FR and BUGS.txt

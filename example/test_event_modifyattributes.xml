@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lifecycle>
+
+    <!-- ============================================ -->
+    <!-- TEST CONFIGURATION                           -->
+    <!-- ============================================ -->
+    <config>
+        <workflowengineid>1</workflowengineid>
+    </config>
+
+
+    <!-- ============================================ -->
+    <!-- EVENT DATA - PersonCandidate MODIFY          -->
+    <!-- ============================================ -->
+    <!-- Triggered when telephonenumber, mobile,      -->
+    <!-- costcenter, workforceid, position or         -->
+    <!-- jobtitle changes (no special lifecycle event)-->
+    <eventCollection dbuser="daccord" streamname="Lifecycle with PersonCandidate" streamid="1011">
+        <nodeEvent>
+            <!-- Event metadata -->
+            <eventuniqueid>test-modify-001</eventuniqueid>
+            <eventname>PersonCandidate</eventname>
+            <labels>PersonCandidate</labels>
+            <type>MODIFY_NODE</type>
+            <timestamp>1724343599695</timestamp>
+
+            <!-- PersonCandidate identification -->
+            <!-- uniqueid must exist in the daccord database! -->
+            <sourcenodeuniqueid>100052</sourcenodeuniqueid>
+            <sourcenodename>Silas Wagner</sourcenodename>
+
+            <!-- Property change: telephonenumber changed -->
+            <propertyEvents>
+                <propertyEvent>
+                    <type>MODIFY_PROPERTY</type>
+                    <name>telephonenumber</name>
+                    <oldvalue>+49 69 123456-0</oldvalue>
+                    <newvalue>+49 69 123456-52</newvalue>
+                </propertyEvent>
+            </propertyEvents>
+        </nodeEvent>
+    </eventCollection>
+
+
+    <!-- ============================================ -->
+    <!-- EXPECTED BEHAVIOR                            -->
+    <!-- ============================================ -->
+    <!-- PersonCandidate: Silas Wagner (100052)       -->
+    <!-- Action detected: MODIFY                      -->
+    <!-- Workflow started: person-mod-attributes-auto -->
+    <!-- Variables from PersonCandidate:              -->
+    <!--   givenname, surname                         -->
+    <!--   telephonenumber, mobile, costcenter        -->
+    <!--   workforceid, position, jobtitle            -->
+    <!-- Variables from Person node:                  -->
+    <!--   processtargetuniqueid: globaluniqueid      -->
+    <!-- ============================================ -->
+
+</lifecycle>
