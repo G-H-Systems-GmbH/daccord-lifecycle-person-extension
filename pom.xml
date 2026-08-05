@@ -1,0 +1,223 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>de.guh.gadget</groupId>
+	<artifactId>daccord-lifecycle-person-extension</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<name>daccord-lifecycle-person-extension</name>
+	<description>This is the core library for inchorus portals</description>
+	<scm>
+		<connection>scm:svn:https://svn.guh-systems.de/repos/G+H/products/daccord/extensions/daccord-lifecycle-person-extension-1.0/daccord-lifecycle-person-extension/trunk</connection>
+		<developerConnection>scm:svn:https://svn.guh-systems.de/repos/G+H/products/daccord/extensions/daccord-lifecycle-person-extension-1.0/daccord-lifecycle-person-extension/trunk</developerConnection>
+		<url>https://svn.guh-systems.de/repos/G+H/products/</url>
+	</scm>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<!-- Switches -->
+		<skipTests>true</skipTests>
+		<dependency-check.skip>false</dependency-check.skip>	
+	
+		<!-- Versions -->
+		<log4j.version>2.26.1</log4j.version>
+		<gadget-core.version>3.0.11</gadget-core.version>
+		<stax2-api.version>4.2.2</stax2-api.version>
+		<commons-fileupload.version>1.5</commons-fileupload.version>
+		<camunda-plugin.version>2.0.17</camunda-plugin.version>
+		<netiqidm-plugin.version>2.0.6</netiqidm-plugin.version>
+		<inchorus-daccord-lifecycle-extension.version>2.2.72</inchorus-daccord-lifecycle-extension.version>
+		<!-- Plugin Versions  -->
+		<dependency-check.version>12.2.0</dependency-check.version>
+		<compiler-plugin.version>3.13.0</compiler-plugin.version>
+		<release-plugin.version>3.1.1</release-plugin.version>
+		<surefire-plugin.version>3.5.2</surefire-plugin.version>
+		<shade-plugin.version>3.5.2</shade-plugin.version>
+		
+		<javax.servlet-api.version>4.0.1</javax.servlet-api.version>
+		
+	</properties>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.17</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>checkstyle</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
+	<build>
+		<resources>
+			<resource>
+				<directory>${basedir}/src/main/resources</directory>
+				<targetPath>META-INF</targetPath>
+				<includes>
+					<include>license.txt</include>
+				</includes>
+			</resource>
+		</resources>
+		<!-- To use the plugin goals in your POM or parent POM -->
+		<plugins>
+			<plugin>
+              	<groupId>org.owasp</groupId>
+              	<artifactId>dependency-check-maven</artifactId>
+              	<version>${dependency-check.version}</version>
+              	<executions>
+              		<execution>
+   						<goals>
+                      		<goal>check</goal>
+                      	</goals>
+                	</execution>
+              	</executions>
+              <configuration>
+              		<assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
+              		<failBuildOnCVSS>0</failBuildOnCVSS>
+              		<skip>${dependency-check.skip}</skip>
+              		<suppressionFile>https://www.inchorus.de/software/inchorus/dependency-check-suppressions.xml</suppressionFile><!-- suppress false positives and irrelevant CVEs -->
+              		<nvdApiKey>eb322e3a-fe86-441d-9c5e-a87943f3b19e</nvdApiKey>
+              		<ossIndexUsername>info@guh-systems.de</ossIndexUsername>
+              		<ossIndexPassword>7c0b168ebace905ea40786ef1ce24243d0a0b55e</ossIndexPassword><!-- API Token -->
+              </configuration>
+            </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${compiler-plugin.version}</version>
+				<configuration>
+					<release>11</release>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${surefire-plugin.version}</version>
+				<configuration>
+					<skipTests>${skipTests}</skipTests>
+				</configuration>
+			</plugin>
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-shade-plugin</artifactId>
+			    <version>${shade-plugin.version}</version>
+			    <executions>
+			        <execution>
+			            <phase>package</phase>
+			            <goals>
+			                <goal>shade</goal>
+			            </goals>
+			            <configuration>
+			                <shadedArtifactAttached>true</shadedArtifactAttached>
+			                <shadedClassifierName>runnable</shadedClassifierName>
+			                <transformers>
+			                    <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+			                        <mainClass>de.guh.extension.lifecycle.person.Main</mainClass>
+			                    </transformer>
+			                </transformers>
+			                <filters>
+			                    <filter>
+			                        <artifact>*:*</artifact>
+			                        <excludes>
+			                            <exclude>META-INF/*.SF</exclude>
+			                            <exclude>META-INF/*.DSA</exclude>
+			                            <exclude>META-INF/*.RSA</exclude>
+			                        </excludes>
+			                    </filter>
+			                </filters>
+			            </configuration>
+			        </execution>
+			    </executions>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<!-- <LOG4J> -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+		<!-- <//LOG4J> -->
+
+		<!-- INCHORUS -->
+		<dependency>
+			<groupId>de.guh.gadget</groupId>
+			<artifactId>inchorus-gadget-core</artifactId>
+			<version>${gadget-core.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>de.guh.plugin.daccord.extensions</groupId>
+			<artifactId>inchorus-daccord-lifecycle-extension</artifactId>
+			<version>${inchorus-daccord-lifecycle-extension.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>de.guh.plugin</groupId>
+			<artifactId>inchorus-camunda-plugin</artifactId>
+			<version>${camunda-plugin.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>de.guh.plugin</groupId>
+			<artifactId>inchorus-netiqidm-plugin</artifactId>
+			<version>${netiqidm-plugin.version}</version>
+		</dependency>
+
+		<!-- // INCHORUS -->
+		
+		<!-- https://mvnrepository.com/artifact/org.codehaus.woodstox/stax2-api -->
+ 		<dependency>
+			<groupId>org.codehaus.woodstox</groupId>
+			<artifactId>stax2-api</artifactId>
+			<version>${stax2-api.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+ 		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${javax.servlet-api.version}</version>
+		</dependency>
+ 		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>${commons-fileupload.version}</version>
+		</dependency>
+	</dependencies>
+	
+	<distributionManagement>
+		<repository>
+			<id>GuHRepo</id>
+			<name>maven-releases</name>
+			<url>http://nexus.guh-systems.de/repository/maven-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>GuHRepo</id>
+			<name>maven-snapshots</name>
+			<url>http://nexus.guh-systems.de/repository/maven-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+	<profiles>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-release-plugin</artifactId>
+						<version>${release-plugin.version}</version>
+						<configuration>
+							<checkModificationExcludes>
+								<checkModificationExclude>.classpath</checkModificationExclude>
+								<checkModificationExclude>.settings</checkModificationExclude>
+								<!-- <checkModificationExclude>target</checkModificationExclude> -->
+								<checkModificationExclude>${project.build.directory}\</checkModificationExclude>
+							</checkModificationExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

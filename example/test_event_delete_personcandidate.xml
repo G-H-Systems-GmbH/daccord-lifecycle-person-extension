@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lifecycle>
+
+    <!-- ============================================ -->
+    <!-- TEST CONFIGURATION                           -->
+    <!-- ============================================ -->
+    <config>
+        <workflowengineid>1</workflowengineid>
+    </config>
+
+
+    <!-- ============================================ -->
+    <!-- EVENT DATA - PersonCandidate DELETE_NODE     -->
+    <!-- ============================================ -->
+    <!-- Simulates a dAccord stream event when a      -->
+    <!-- PersonCandidate node is deleted from Neo4j.  -->
+    <!-- The PersonCandidate node is already gone     -->
+    <!-- at the time of processing – only the         -->
+    <!-- sourcenodeuniqueid (= employeeid) is used.   -->
+    <eventCollection dbuser="daccord" streamname="Lifecycle with PersonCandidate" streamid="1011">
+        <nodeEvent>
+            <!-- Event metadata -->
+            <eventuniqueid>test-delete-personcandidate-001</eventuniqueid>
+            <eventname>PersonCandidate</eventname>
+            <labels>PersonCandidate</labels>
+            <type>DELETE_NODE</type>
+            <timestamp>1724343599695</timestamp>
+
+            <!-- PersonCandidate identification -->
+            <!-- sourcenodeuniqueid = employeeid of the deleted PersonCandidate -->
+            <!-- Person: Silas Wagner-Müller (employeeid 100052, status active, no leavedate) -->
+            <sourcenodeuniqueid>100052</sourcenodeuniqueid>
+            <sourcenodename>Silas Wagner-Müller</sourcenodename>
+
+            <propertyEvents/>
+        </nodeEvent>
+    </eventCollection>
+
+
+    <!-- ============================================ -->
+    <!-- EXPECTED BEHAVIOR                            -->
+    <!-- ============================================ -->
+    <!-- Handler: PersonCandidateTaskHandler.handleDelete() -->
+    <!-- 1. Find Person with employeeid = 100052       -->
+    <!--    WHERE leavedate IS NULL OR leavedate = ''   -->
+    <!-- 2. Found: Silas Wagner-Müller                 -->
+    <!--    (globaluniqueid: 2-22d7505a-250b-4af7-a194-a6f976b1251e, status: active) -->
+    <!-- 3. SET p.leavedate = <today> 00:00:00         -->
+    <!-- 4. Policy 1 (Expired Leavedate) picks up      -->
+    <!--    on next scheduled run                      -->
+    <!-- ============================================ -->
+
+</lifecycle>

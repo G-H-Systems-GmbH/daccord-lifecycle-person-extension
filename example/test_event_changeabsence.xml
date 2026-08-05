@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lifecycle>
+
+    <!-- ============================================ -->
+    <!-- TEST CONFIGURATION                           -->
+    <!-- ============================================ -->
+    <config>
+        <workflowengineid>1</workflowengineid>
+    </config>
+
+
+    <!-- ============================================ -->
+    <!-- EVENT DATA - PersonCandidate CHANGE_ABSENCE  -->
+    <!-- ============================================ -->
+    <!-- Triggered when dateofabsencestart,           -->
+    <!-- dateofabsenceend, statusreason or            -->
+    <!-- systemaccess changes                         -->
+    <eventCollection dbuser="daccord" streamname="Lifecycle with PersonCandidate" streamid="1011">
+        <nodeEvent>
+            <!-- Event metadata -->
+            <eventuniqueid>test-absence-001</eventuniqueid>
+            <eventname>PersonCandidate</eventname>
+            <labels>PersonCandidate</labels>
+            <type>MODIFY_NODE</type>
+            <timestamp>1724343599695</timestamp>
+
+            <!-- PersonCandidate identification -->
+            <!-- uniqueid must exist in the daccord database! -->
+            <sourcenodeuniqueid>100052</sourcenodeuniqueid>
+            <sourcenodename>Silas Wagner</sourcenodename>
+
+            <!-- Property changes: absence attributes changed -->
+            <propertyEvents>
+                <propertyEvent>
+                    <type>MODIFY_PROPERTY</type>
+                    <name>dateofabsencestart</name>
+                    <oldvalue></oldvalue>
+                    <newvalue>2025-03-01</newvalue>
+                </propertyEvent>
+                <propertyEvent>
+                    <type>MODIFY_PROPERTY</type>
+                    <name>dateofabsenceend</name>
+                    <oldvalue></oldvalue>
+                    <newvalue>2025-03-15</newvalue>
+                </propertyEvent>
+                <propertyEvent>
+                    <type>MODIFY_PROPERTY</type>
+                    <name>statusreason</name>
+                    <oldvalue></oldvalue>
+                    <newvalue>Krankenstand</newvalue>
+                </propertyEvent>
+            </propertyEvents>
+        </nodeEvent>
+    </eventCollection>
+
+
+    <!-- ============================================ -->
+    <!-- EXPECTED BEHAVIOR                            -->
+    <!-- ============================================ -->
+    <!-- PersonCandidate: Silas Wagner (100052)       -->
+    <!-- Action detected: CHANGE_ABSENCE              -->
+    <!-- Workflow started: person-mod-absence-auto    -->
+    <!-- Variables from PersonCandidate:              -->
+    <!--   givenname, surname                         -->
+    <!--   dateofabsencestart: 2025-03-01             -->
+    <!--   dateofabsenceend:   2025-03-15             -->
+    <!--   statusreason:       Krankenstand           -->
+    <!-- Variables from Person node (via employeeid): -->
+    <!--   processtargetuniqueid: globaluniqueid      -->
+    <!--   responsibleglobaluniqueid: IS_PERSONMANAGER-->
+    <!-- ============================================ -->
+
+</lifecycle>

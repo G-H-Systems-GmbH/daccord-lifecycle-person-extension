@@ -1,0 +1,49 @@
+<config type="code">
+	<base>
+		<loglevel>DEBUG</loglevel> 
+			<!-- how much data will be shown in the logile
+				values: DEBUG, ERROR, WARN 
+			-->
+		<logpath/> 
+			<!-- filepath of the logfile. If no value is given the logfile is created in a logs directory of the resource path (set with environment variable) is used -->
+		<logfile/> 
+			<!-- filename of the logfile -->
+		<logfilesizemax>10MB</logfilesizemax>
+			<!-- maximum size of the logfile. If size is exceeded a new file will be created. Default value is 10MB -->
+		<logfilebackupindexmax>5</logfilebackupindexmax>
+			<!-- maximum count of logfiles to store. If given number is exceeded the oldest file will be deleted. Default value is 5 -->
+		<logadditionalpackages/>
+		<!-- log additional packages. de.guh.MailEngine;de.guh.FOPEngine -->
+		<sessiontimeout>30</sessiontimeout> 
+			<!-- session timeout in minutes. if no user request is processes in the given timeframe the user has to relogin -->
+		<verificationcode>12345</verificationcode>
+			<!-- the verificationcode we will ask for, if authenticationmode is set to verification
+			Default values is the value specified in the gadget main class -->	
+		<decryptionhash>923921380eb2</decryptionhash>
+			<!-- value used for decryption -->
+		<devicedetection default="_default">	
+			<check_1 path="smartphone">.*iPhone.*</check_1>
+			<check_2 path="tablet">.*iPad.*</check_2>
+			<check_3 path="android">.*Android.*</check_3>
+		</devicedetection>
+		<languagedetection default="en">
+			<check_1 path="en">en</check_1>
+			<check_2 path="de">de</check_2>
+		</languagedetection>
+		<!-- depending on client detection the equivalent content representation will be loaded -->
+		<alternativecontentpath>/var/opt/GuH/data/portal-customfiles</alternativecontentpath>
+	</base>
+	<system>
+		<systemurl>$DAC_SYSTEM_URL$</systemurl>
+		<systemid>1</systemid>
+		<systemdbprotocol>bolt</systemdbprotocol>
+		<systemdbhost>172.16.88.15</systemdbhost>
+		<systemdbport>7687</systemdbport>
+		<systemdbname>daccord.db</systemdbname>
+		<systemdbuser>daccord</systemdbuser>
+		<systemdbpassword type="encrypted">MijnPxUKD4DdOcWtBvXHxjB/dgryHLzOS/hjKOsAndK1V3xKDntVae4</systemdbpassword>
+	</system>
+	<portal>
+		<portalid>1</portalid>
+	</portal>
+</config>

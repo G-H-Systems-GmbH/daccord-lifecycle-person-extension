@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lifecycle>
+
+    <!-- ============================================ -->
+    <!-- TEST CONFIGURATION                           -->
+    <!-- ============================================ -->
+    <config>
+        <workflowengineid>1</workflowengineid>
+    </config>
+
+
+    <!-- ============================================ -->
+    <!-- EVENT DATA - PersonCandidate CHANGE_OU       -->
+    <!-- ============================================ -->
+    <!-- Triggered when companycode, orgunit1code,    -->
+    <!-- orgunit2code or orgunit3code changes         -->
+    <eventCollection dbuser="daccord" streamname="Lifecycle with PersonCandidate" streamid="1011">
+        <nodeEvent>
+            <!-- Event metadata -->
+            <eventuniqueid>test-changeou-001</eventuniqueid>
+            <eventname>PersonCandidate</eventname>
+            <labels>PersonCandidate</labels>
+            <type>MODIFY_NODE</type>
+            <timestamp>1724343599695</timestamp>
+
+            <!-- PersonCandidate identification -->
+            <!-- uniqueid must exist in the daccord database! -->
+            <sourcenodeuniqueid>100052</sourcenodeuniqueid>
+            <sourcenodename>Silas Wagner</sourcenodename>
+
+            <!-- Property change: orgunit2 changed -->
+            <propertyEvents>
+                <propertyEvent>
+                    <type>MODIFY_PROPERTY</type>
+                    <name>orgunit2code</name>
+                    <oldvalue>10000-30000-34000</oldvalue>
+                    <newvalue>10000-30000-35000</newvalue>
+                </propertyEvent>
+            </propertyEvents>
+        </nodeEvent>
+    </eventCollection>
+
+
+    <!-- ============================================ -->
+    <!-- EXPECTED BEHAVIOR                            -->
+    <!-- ============================================ -->
+    <!-- PersonCandidate: Silas Wagner (100052)       -->
+    <!-- Action detected: CHANGE_OU                   -->
+    <!-- Workflow started: person-mod-org             -->
+    <!-- Variables from Person node (old/current):    -->
+    <!--   currentcompanyname: daccord GmbH           -->
+    <!--   currentlocationname: daccord GmbH - ...    -->
+    <!--   currentorgunit1name: Board of Directors    -->
+    <!--   currentorgunit2name: IT                    -->
+    <!--   currentorgunit3name: (leer)                -->
+    <!-- Variables from PersonCandidate (new values): -->
+    <!--   newcompanyname: daccord GmbH               -->
+    <!--   newlocationname: daccord GmbH - ...        -->
+    <!--   neworgunit1name: Board of Directors        -->
+    <!--   neworgunit2name: (neuer Wert aus DB)       -->
+    <!--   neworgunit3name: (leer)                    -->
+    <!-- Variables from IS_PERSONMANAGER:             -->
+    <!--   givennamecurrentresponsible: Henrietta     -->
+    <!--   surnamecurrentresponsible: Schuldtmann     -->
+    <!--   fullnamecurrentresponsible: Henrietta ...  -->
+    <!-- ============================================ -->
+
+</lifecycle>

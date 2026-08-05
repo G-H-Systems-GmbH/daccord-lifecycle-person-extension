@@ -1,0 +1,13 @@
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<Configuration status="WARN">
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t][%M] %-5level %logger{36} - %msg%n"/>
+    </Console>
+  </Appenders>
+  <Loggers>
+    <Root level="trace">
+      <AppenderRef ref="Console"> </AppenderRef>
+    </Root>
+  </Loggers>
+</Configuration>

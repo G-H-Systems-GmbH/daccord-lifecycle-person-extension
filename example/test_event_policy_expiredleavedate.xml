@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lifecycle>
+
+    <!-- ============================================ -->
+    <!-- TEST CONFIGURATION                           -->
+    <!-- ============================================ -->
+    <config>
+        <workflowengineid>1</workflowengineid>
+    </config>
+
+
+    <!-- ============================================ -->
+    <!-- EVENT DATA - PolicyStatistics               -->
+    <!-- Policy: Expired Leavedate (ID: 1002000)     -->
+    <!-- ============================================ -->
+    <!-- Simulates a dAccord policy trigger event.   -->
+    <!-- Sets all active persons with a passed       -->
+    <!-- leavedate to status=inactive in Neo4j.      -->
+    <eventCollection dbuser="daccord" streamname="Lifecycle with PersonCandidate" streamid="1011">
+        <nodeEvent>
+            <!-- Event metadata -->
+            <eventuniqueid>test-policy-expiredleavedate-001</eventuniqueid>
+            <eventname>PolicyStatistics</eventname>
+            <labels>PolicyStatistics</labels>
+            <type>MODIFY_NODE</type>
+            <timestamp>1724343599695</timestamp>
+
+            <!-- Policy identification -->
+            <!-- sourcenodeuniqueid = policyId → routed in processPolicyEvents() -->
+            <sourcenodeuniqueid>10004</sourcenodeuniqueid>
+            <sourcenodename>Expired Leavedate Policy</sourcenodename>
+
+            <propertyEvents/>
+        </nodeEvent>
+    </eventCollection>
+
+
+    <!-- ============================================ -->
+    <!-- EXPECTED BEHAVIOR                            -->
+    <!-- ============================================ -->
+    <!-- Policy handler: handlePolicyExpiredLeavedate -->
+    <!-- Query: MATCH (p:Person {status:"active"})   -->
+    <!--        WHERE leavedate < datetime()          -->
+    <!-- Action: SET p.status = 'inactive'            -->
+    <!-- ============================================ -->
+
+</lifecycle>

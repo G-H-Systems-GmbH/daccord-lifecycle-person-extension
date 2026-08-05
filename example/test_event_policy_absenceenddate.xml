@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lifecycle>
+
+    <!-- ============================================ -->
+    <!-- TEST CONFIGURATION                           -->
+    <!-- ============================================ -->
+    <config>
+        <workflowengineid>1</workflowengineid>
+    </config>
+
+
+    <!-- ============================================ -->
+    <!-- EVENT DATA - PolicyStatistics               -->
+    <!-- Policy: Check Absence Enddate (ID: 1002004) -->
+    <!-- ============================================ -->
+    <!-- Simulates a dAccord policy trigger event.   -->
+    <!-- Sets all absent persons with absenceenddate -->
+    <!-- < today back to status=active in Neo4j.     -->
+    <eventCollection dbuser="daccord" streamname="Lifecycle with PersonCandidate" streamid="1011">
+        <nodeEvent>
+            <!-- Event metadata -->
+            <eventuniqueid>test-policy-absenceenddate-001</eventuniqueid>
+            <eventname>PolicyStatistics</eventname>
+            <labels>PolicyStatistics</labels>
+            <type>MODIFY_NODE</type>
+            <timestamp>1724343599695</timestamp>
+
+            <!-- Policy identification -->
+            <!-- sourcenodeuniqueid = policyId → routed in processPolicyEvents() -->
+            <sourcenodeuniqueid>1002004</sourcenodeuniqueid>
+            <sourcenodename>Check Absence Enddate Policy</sourcenodename>
+
+            <propertyEvents/>
+        </nodeEvent>
+    </eventCollection>
+
+
+    <!-- ============================================ -->
+    <!-- EXPECTED BEHAVIOR                            -->
+    <!-- ============================================ -->
+    <!-- Policy handler: handlePolicyAbsenceEnddate  -->
+    <!-- Query: MATCH (n:Person)                     -->
+    <!--        WHERE status = 'absent'              -->
+    <!--          AND absenceenddate < date()         -->
+    <!-- Action: SET p.status = 'active'             -->
+    <!-- ============================================ -->
+
+</lifecycle>

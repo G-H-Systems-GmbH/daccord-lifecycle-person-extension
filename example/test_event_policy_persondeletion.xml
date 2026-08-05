@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lifecycle>
+
+    <!-- ============================================ -->
+    <!-- TEST CONFIGURATION                           -->
+    <!-- ============================================ -->
+    <config>
+        <workflowengineid>1</workflowengineid>
+    </config>
+
+
+    <!-- ============================================ -->
+    <!-- EVENT DATA - PolicyStatistics               -->
+    <!-- Policy: Check Person for Deletion (1002005) -->
+    <!-- ============================================ -->
+    <!-- Simulates a dAccord policy trigger event.   -->
+    <!-- Deletes persons in status=deletioninprogress-->
+    <!-- with no accounts and leavedate > 30 days.   -->
+    <eventCollection dbuser="daccord" streamname="Lifecycle with PersonCandidate" streamid="1011">
+        <nodeEvent>
+            <!-- Event metadata -->
+            <eventuniqueid>test-policy-persondeletion-001</eventuniqueid>
+            <eventname>PolicyStatistics</eventname>
+            <labels>PolicyStatistics</labels>
+            <type>MODIFY_NODE</type>
+            <timestamp>1724343599695</timestamp>
+
+            <!-- Policy identification -->
+            <!-- sourcenodeuniqueid = policyId → routed in processPolicyEvents() -->
+            <sourcenodeuniqueid>1002005</sourcenodeuniqueid>
+            <sourcenodename>Check Person for Deletion Policy</sourcenodename>
+
+            <propertyEvents/>
+        </nodeEvent>
+    </eventCollection>
+
+
+    <!-- ============================================ -->
+    <!-- EXPECTED BEHAVIOR                            -->
+    <!-- ============================================ -->
+    <!-- Policy handler: handlePolicyPersonDeletion  -->
+    <!-- Query: MATCH (p:Person)                     -->
+    <!--        WHERE status = 'deletioninprogress'  -->
+    <!--          AND NOT (p)-[:HAS_SECURITYPRINCIPAL]->() -->
+    <!--          AND leavedate < datetime()-30d      -->
+    <!-- Action: DETACH DELETE p                     -->
+    <!-- ============================================ -->
+
+</lifecycle>

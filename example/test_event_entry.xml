@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lifecycle>
+    
+    <!-- ============================================ -->
+    <!-- TEST CONFIGURATION                           -->
+    <!-- ============================================ -->
+    <config>
+        <!-- Workflow Engine ID (Camunda) -->
+        <workflowengineid>1</workflowengineid>
+    </config>
+    
+    
+    <!-- ============================================ -->
+    <!-- EVENT DATA - PersonCandidate ENTRY          -->
+    <!-- ============================================ -->
+    <!-- This simulates a Kafka event when a PersonCandidate becomes relevant for provisioning -->
+    <eventCollection dbuser="daccord" streamname="Lifecycle with PersonCandidate" streamid="1011">
+        <nodeEvent>
+            <!-- Event metadata -->
+            <eventuniqueid>test-entry-001</eventuniqueid>
+            <eventname>PersonCandidate</eventname>
+            <labels>PersonCandidate</labels>
+            <type>MODIFY_NODE</type>
+            <timestamp>1724343599695</timestamp>
+            
+            <!-- PersonCandidate identification -->
+            <!-- This uniqueid must exist in the daccord database! -->
+            <sourcenodeuniqueid>100052</sourcenodeuniqueid>
+            <sourcenodename>Silas Wagner</sourcenodename>
+            
+            <!-- Property changes that triggered the event -->
+            <propertyEvents>
+                <propertyEvent>
+                    <type>MODIFY_PROPERTY</type>
+                    <name>relevantforadd</name>
+                    <oldvalue>false</oldvalue>
+                    <newvalue>true</newvalue>
+                </propertyEvent>
+            </propertyEvents>
+        </nodeEvent>
+    </eventCollection>
+    
+    
+    <!-- ============================================ -->
+    <!-- EXPECTED BEHAVIOR                            -->
+    <!-- ============================================ -->
+    <!-- PersonCandidate: Soshi Matsuri (100028) -->
+    <!-- Action detected: ENTRY -->
+    <!-- Workflow started: person-internal-add-auto -->
+    <!-- Variables built from PersonCandidate data: -->
+    <!--   - personnelid: 100028 -->
+    <!--   - givenname: Soshi -->
+    <!--   - surname: Matsuri -->
+    <!--   - gender: M -->
+    <!--   - companycode: 10000 (daccord GmbH) -->
+    <!--   - locationcode: 10000-20000 (Offenbach am Main) -->
+    <!--   - orgunit1code: 10000-30000 (Board of Directors) -->
+    <!--   - orgunit2code: 10000-30000-32000 (Sales & Marketing) -->
+    <!--   - orgunit3code: 10000-30000-32000-42000 (Marketing) -->
+    <!--   - manageruniqueid: 100033 -->
+    <!--   - jobtitle: PR Specialist -->
+    <!--   - entrydate: 20200515 -->
+    <!--   - dateofbirth: 19761119 -->
+    <!-- ============================================ -->
+    
+</lifecycle>
