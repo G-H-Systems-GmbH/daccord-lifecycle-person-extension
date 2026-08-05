@@ -19,7 +19,7 @@
 		<verificationcode>12345</verificationcode>
 			<!-- the verificationcode we will ask for, if authenticationmode is set to verification
 			Default values is the value specified in the gadget main class -->	
-		<decryptionhash>923921380eb2</decryptionhash>
+		<decryptionhash>YOUR_DECRYPTION_HASH</decryptionhash>
 			<!-- value used for decryption -->
 		<devicedetection default="_default">	
 			<check_1 path="smartphone">.*iPhone.*</check_1>
@@ -37,11 +37,11 @@
 		<systemurl>$DAC_SYSTEM_URL$</systemurl>
 		<systemid>1</systemid>
 		<systemdbprotocol>bolt</systemdbprotocol>
-		<systemdbhost>172.16.88.15</systemdbhost>
+		<systemdbhost>YOUR_DB_HOST</systemdbhost>
 		<systemdbport>7687</systemdbport>
 		<systemdbname>daccord.db</systemdbname>
 		<systemdbuser>daccord</systemdbuser>
-		<systemdbpassword type="encrypted">MijnPxUKD4DdOcWtBvXHxjB/dgryHLzOS/hjKOsAndK1V3xKDntVae4</systemdbpassword>
+		<systemdbpassword type="encrypted">YOUR_ENCRYPTED_PASSWORD</systemdbpassword>
 	</system>
 	<portal>
 		<portalid>1</portalid>
