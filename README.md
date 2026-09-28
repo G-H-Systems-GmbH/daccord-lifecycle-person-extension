@@ -72,13 +72,19 @@ These policy names must match exactly what is configured on the corresponding `P
 - daccord with the Lifecycle Extension event stream configured (Integration Package ID **101**, fixed in `Main.java`)
 - CIB Seven as the configured workflow engine, with the referenced process keys deployed (`person-internal-add-auto`, `person-internal-delete-auto`)
 
+## Compatibility
+
+| Extension version | daccord version | Java |
+|-------------------|-----------------|------|
+| 1.0.x | up to 2.2.3 | 11 |
+
 ## Building
 
 ```bash
 mvn clean package -q
 ```
 
-The runnable JAR is built to `target/daccord-lifecycle-person-extension-1.0.0-SNAPSHOT-runnable.jar`.
+The runnable JAR is built to `target/daccord-lifecycle-person-extension-1.0.0-runnable.jar`.
 
 ## Configuration
 
@@ -96,7 +102,7 @@ The runnable JAR is built to `target/daccord-lifecycle-person-extension-1.0.0-SN
 ## Running (standalone test)
 
 ```bash
-java -Dlog4j2.level=DEBUG -jar target/daccord-lifecycle-person-extension-1.0.0-SNAPSHOT-runnable.jar \
+java -Dlog4j2.level=DEBUG -jar target/daccord-lifecycle-person-extension-1.0.0-runnable.jar \
   example/config.xml \
   example/test_event_entry.xml
 ```
