@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.guh.gadget</groupId>
 	<artifactId>daccord-lifecycle-person-extension</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>daccord-lifecycle-person-extension</name>
 	<description>This is the core library for inchorus portals</description>
 	<scm>
@@ -19,14 +19,14 @@
 	
 		<!-- Versions -->
 		<log4j.version>2.26.1</log4j.version>
-		<gadget-core.version>3.0.11</gadget-core.version>
+		<gadget-core.version>3.0.12</gadget-core.version>
 		<stax2-api.version>4.2.2</stax2-api.version>
 		<commons-fileupload.version>1.5</commons-fileupload.version>
 		<camunda-plugin.version>2.0.17</camunda-plugin.version>
 		<netiqidm-plugin.version>2.0.6</netiqidm-plugin.version>
-		<inchorus-daccord-lifecycle-extension.version>2.2.72</inchorus-daccord-lifecycle-extension.version>
+		<inchorus-daccord-lifecycle-extension.version>2.2.74</inchorus-daccord-lifecycle-extension.version>
 		<!-- Plugin Versions  -->
-		<dependency-check.version>12.2.0</dependency-check.version>
+		<dependency-check.version>12.2.2</dependency-check.version>
 		<compiler-plugin.version>3.13.0</compiler-plugin.version>
 		<release-plugin.version>3.1.1</release-plugin.version>
 		<surefire-plugin.version>3.5.2</surefire-plugin.version>
