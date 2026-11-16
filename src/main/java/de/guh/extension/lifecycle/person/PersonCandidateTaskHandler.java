@@ -266,11 +266,11 @@ public class PersonCandidateTaskHandler {
 			CamundaAction action = new CamundaAction(thiscamundasession);
 			CamundaResponse gr = action.startProcess("person-internal-add-auto", variables);
 			if (gr.wasSuccess()) {
-				Gadget.log.debug("MSDYNAMICSPersonCandidateConsumerTask()...handleEntry()..." + gr.getStatusmessage());
+				Gadget.log.debug("PersonCandidateConsumerTask()...handleEntry()..." + gr.getStatusmessage());
 			} else {
 				gr.getStatusmessage();
-				Gadget.log.debug("MSDYNAMICSPersonCandidateConsumerTask()...handleEntry()..." + gr.getStatusmessage());
-				Gadget.log.debug("MSDYNAMICSPersonCandidateConsumerTask()...handleEntry()..." + gr.getStatusXML());
+				Gadget.log.debug("PersonCandidateConsumerTask()...handleEntry()..." + gr.getStatusmessage());
+				Gadget.log.debug("PersonCandidateConsumerTask()...handleEntry()..." + gr.getStatusXML());
 			}
 		} catch (CamundaException e) {
 			// TODO Auto-generated catch block
@@ -763,15 +763,15 @@ public class PersonCandidateTaskHandler {
 			CamundaResponse gr = action.startProcess("person-mod-resp", variables);
 			CamundaResponse gr2 = action.startProcess("person-mod-costresp", variables);
 			if (gr2.wasSuccess() && gr.wasSuccess()) {
-				Gadget.log.debug("MSDYNAMICSPersonCandidateConsumerTask()...changeResp()..." + gr.getStatusmessage());
-				Gadget.log.debug("MSDYNAMICSPersonCandidateConsumerTask()...changeCostResp()..." + gr2.getStatusmessage());
+				Gadget.log.debug("PersonCandidateConsumerTask()...changeResp()..." + gr.getStatusmessage());
+				Gadget.log.debug("PersonCandidateConsumerTask()...changeCostResp()..." + gr2.getStatusmessage());
 			} else {
 				gr2.getStatusmessage();
-				Gadget.log.debug("MSDYNAMICSPersonCandidateConsumerTask()...changeCostResp()..." + gr2.getStatusmessage());
-				Gadget.log.debug("MSDYNAMICSPersonCandidateConsumerTask()...changeCostResp()..." + gr2.getStatusXML());
+				Gadget.log.debug("PersonCandidateConsumerTask()...changeCostResp()..." + gr2.getStatusmessage());
+				Gadget.log.debug("PersonCandidateConsumerTask()...changeCostResp()..." + gr2.getStatusXML());
 				gr.getStatusmessage();
-				Gadget.log.debug("MSDYNAMICSPersonCandidateConsumerTask()...changeResp()..." + gr.getStatusmessage());
-				Gadget.log.debug("MSDYNAMICSPersonCandidateConsumerTask()...changeResp()..." + gr.getStatusXML());
+				Gadget.log.debug("PersonCandidateConsumerTask()...changeResp()..." + gr.getStatusmessage());
+				Gadget.log.debug("PersonCandidateConsumerTask()...changeResp()..." + gr.getStatusXML());
 			}
 		} catch (CamundaException e) {
 			// TODO Auto-generated catch block
@@ -1034,12 +1034,12 @@ public class PersonCandidateTaskHandler {
 		try {
 			String statement = "MATCH (o:"+objectobjecttype+" {"+objectuniqueidpropertyname+":'" + objectuniqueid +
 					"'})<-[]-(s:System) RETURN s.systemid AS systemid;";
-				Gadget.log.debug("MSDYNAMICSPersonCandidateConsumerTask()...getSystembyObject...statement:" + statement);
+				Gadget.log.debug("PersonCandidateConsumerTask()...getSystembyObject...statement:" + statement);
 				XML xmlManager = database.getXML(statement, "Systems", "system");
-				Gadget.log.debug("MSDYNAMICSPersonCandidateConsumerTask()...getSystembyObject...toString:" + xmlManager.toString());
+				Gadget.log.debug("PersonCandidateConsumerTask()...getSystembyObject...toString:" + xmlManager.toString());
 				xmlManager = xmlManager.getFirstChild();
 				id = xmlManager.getValue("systemid");
-				Gadget.log.debug("MSDYNAMICSPersonCandidateConsumerTask()...getSystembyObject...name:" + id);
+				Gadget.log.debug("PersonCandidateConsumerTask()...getSystembyObject...name:" + id);
 		} catch (Exception e) {
 			
 		}
@@ -1050,12 +1050,12 @@ public class PersonCandidateTaskHandler {
 		String id ="";
 		try {
 			String statement = "MATCH (d:Daccord)-[:IS_AUTHORIZATIONSYSTEM]->(s:System) RETURN s.systemid AS systemid;";
-				Gadget.log.debug("MSDYNAMICSPersonCandidateConsumerTask()...getSystembyObject...statement:" + statement);
+				Gadget.log.debug("PersonCandidateConsumerTask()...getSystembyObject...statement:" + statement);
 				XML xmlManager = database.getXML(statement, "Systems", "system");
-				Gadget.log.debug("MSDYNAMICSPersonCandidateConsumerTask()...getSystembyObject...toString:" + xmlManager.toString());
+				Gadget.log.debug("PersonCandidateConsumerTask()...getSystembyObject...toString:" + xmlManager.toString());
 				xmlManager = xmlManager.getFirstChild();
 				id = xmlManager.getValue("systemid");
-				Gadget.log.debug("MSDYNAMICSPersonCandidateConsumerTask()...getSystembyObject...name:" + id);
+				Gadget.log.debug("PersonCandidateConsumerTask()...getSystembyObject...name:" + id);
 		} catch (Exception e) {
 			
 		}

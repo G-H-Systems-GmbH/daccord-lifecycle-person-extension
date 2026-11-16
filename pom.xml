@@ -1,15 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>de.guh.gadget</groupId>
+	<groupId>de.guh.extension.lifecycle</groupId>
 	<artifactId>daccord-lifecycle-person-extension</artifactId>
-	<version>1.0.0</version>
+	<version>2.0.0</version>
 	<name>daccord-lifecycle-person-extension</name>
 	<description>This is the core library for inchorus portals</description>
-	<scm>
-		<connection>scm:svn:https://svn.guh-systems.de/repos/G+H/products/daccord/extensions/daccord-lifecycle-person-extension-1.0/daccord-lifecycle-person-extension/trunk</connection>
-		<developerConnection>scm:svn:https://svn.guh-systems.de/repos/G+H/products/daccord/extensions/daccord-lifecycle-person-extension-1.0/daccord-lifecycle-person-extension/trunk</developerConnection>
-		<url>https://svn.guh-systems.de/repos/G+H/products/</url>
-	</scm>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
@@ -18,37 +13,18 @@
 	
 		<!-- Versions -->
 		<log4j.version>2.26.1</log4j.version>
-		<gadget-core.version>3.0.12</gadget-core.version>
-		<stax2-api.version>4.2.2</stax2-api.version>
-		<commons-fileupload.version>1.5</commons-fileupload.version>
-		<camunda-plugin.version>2.0.17</camunda-plugin.version>
-		<netiqidm-plugin.version>2.0.6</netiqidm-plugin.version>
-		<inchorus-daccord-lifecycle-extension.version>2.2.74</inchorus-daccord-lifecycle-extension.version>
+		<gadget-core.version>4.0.11</gadget-core.version>
+		<camunda-plugin.version>3.0.0</camunda-plugin.version>
+		<inchorus-daccord-lifecycle-extension.version>2.3.3</inchorus-daccord-lifecycle-extension.version>
 		<!-- Plugin Versions  -->
-		<compiler-plugin.version>3.13.0</compiler-plugin.version>
-		<release-plugin.version>3.1.1</release-plugin.version>
-		<surefire-plugin.version>3.5.2</surefire-plugin.version>
-		<shade-plugin.version>3.5.2</shade-plugin.version>
+		<compiler-plugin.version>3.16.0</compiler-plugin.version>
+		<release-plugin.version>3.3.1</release-plugin.version>
+		<surefire-plugin.version>3.6.1</surefire-plugin.version>
+		<shade-plugin.version>3.6.2</shade-plugin.version>
 		
-		<javax.servlet-api.version>4.0.1</javax.servlet-api.version>
+		<jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
 		
 	</properties>
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>2.17</version>
-				<reportSets>
-					<reportSet>
-						<reports>
-							<report>checkstyle</report>
-						</reports>
-					</reportSet>
-				</reportSets>
-			</plugin>
-		</plugins>
-	</reporting>
 	<build>
 		<resources>
 			<resource>
@@ -66,7 +42,7 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${compiler-plugin.version}</version>
 				<configuration>
-					<release>11</release>
+					<release>21</release>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -136,45 +112,17 @@
 			<artifactId>inchorus-camunda-plugin</artifactId>
 			<version>${camunda-plugin.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>de.guh.plugin</groupId>
-			<artifactId>inchorus-netiqidm-plugin</artifactId>
-			<version>${netiqidm-plugin.version}</version>
-		</dependency>
 
 		<!-- // INCHORUS -->
 		
-		<!-- https://mvnrepository.com/artifact/org.codehaus.woodstox/stax2-api -->
+		<!-- https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api -->
  		<dependency>
-			<groupId>org.codehaus.woodstox</groupId>
-			<artifactId>stax2-api</artifactId>
-			<version>${stax2-api.version}</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
- 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>${javax.servlet-api.version}</version>
-		</dependency>
- 		<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
-			<version>${commons-fileupload.version}</version>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+			<version>${jakarta.servlet-api.version}</version>
 		</dependency>
 	</dependencies>
 	
-	<distributionManagement>
-		<repository>
-			<id>GuHRepo</id>
-			<name>maven-releases</name>
-			<url>http://nexus.guh-systems.de/repository/maven-releases/</url>
-		</repository>
-		<snapshotRepository>
-			<id>GuHRepo</id>
-			<name>maven-snapshots</name>
-			<url>http://nexus.guh-systems.de/repository/maven-snapshots/</url>
-		</snapshotRepository>
-	</distributionManagement>
 	<profiles>
 		<profile>
 			<id>release</id>
@@ -197,4 +145,11 @@
 			</build>
 		</profile>
 	</profiles>
+	<repositories>
+		<repository>
+			<id>inchorus</id>
+			<name>inchorus public repository</name>
+			<url>https://www.inchorus.de/repository/maven-releases/</url>
+		</repository>
+	</repositories>
 </project>
